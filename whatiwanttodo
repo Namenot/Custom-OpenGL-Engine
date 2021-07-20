@@ -1,0 +1,24 @@
+I want to write a 3D engine that can both run blender rendered 3d meshes,
+calculate collisions of objects, has a capable terminal, as well as several
+ui elements and sound processing.
+
+Roadmap:
+- terminal 									[Done (sort of)]
+- mesh render
+- keyboard and mouse inputs (as terminal commands)
+- ui
+- physics (velocity, direction vectors, acceleration, mesh collisions, gravity)
+- sounds
+- other physics (heat, mist and other visible gasses, water, airflow / wind)
+
+basic program structure:
+
+main.cpp is the primary c++ script
+initialize terminal
+mainloop.hpp
+
+  - inherit terminal values
+  - change default terminal values to custom ones
+  - load and display UIs and meshes
+  - give control over mouse & keyboard
+  - give control over clocks (multi-threading)
