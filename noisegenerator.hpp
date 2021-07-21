@@ -56,7 +56,7 @@ private:
     void ajustwidth()
     {
         int out;
-        for(out = 2; out*2 <= width; out*=2);
+        for(out = 2; out*2 <= width; out*=2){maxoctaves += 1;}
         width = out;
     }
 
@@ -69,6 +69,7 @@ public:
     int range = 255;
     int width = 16;
     int octaves = 7;
+    int maxoctaves = 0;
     int mountainfreq = 3.5;
     GLfloat smallest;
 
@@ -98,7 +99,7 @@ public:
                 //seed[i][j] += ((rand() % (range)) > ((range*8)/9)) * (range - seed[i][j]);
             }
 
-        seed[width/2][width/2] = 0.5f;//std::max(rand() % (range/2), range/4);
+        //seed[width/2][width/2] = 0.5f;//std::max(rand() % (range/2), range/4);
     }
 
     float noisevalue(int x, int y)
@@ -108,9 +109,10 @@ public:
         y = (width*(y<0)) + (y % width);
 
         float out = 0.0f;
+        int i;
 
-        //octaves can be exceeded which leeds the program to crash
-        for(int i = 0; i <= octaves; ++i)
+        //aplies one octave after the other ... could technically be in paralel
+        for(i = 0; i <= std::min(maxoctaves, octaves); ++i)
         {
             out += sample(x,y, i); //position(x,y), current octave
         }
