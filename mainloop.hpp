@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <thread>
 
+#include <chrono>
+
 // test the clock
 #include "Clockclass.hpp"
 #include "noisegenerator.hpp"
@@ -27,33 +29,40 @@ class MAINLOOP
     // end test
 
     //noise:
-    noise.width = 2048;
-    noise.range = 700;
-    noise.octaves = 5;
+    noise.setwidth(512);
+    noise.range = 350;
+    noise.octaves = 11;
     noise.oceanfract = 1.f/7;
+    noise.rdmseed = 123;
+    //noise.randomizeseed();
     noise.generateseed();
-    std::cout << "seed creation complete\n";
+    std::cout << "seed creation complete (" << noise.rdmseed << ")\n";
 
-    noise.aplynoisemap();
+    //noise.aplynoisemap();
     std::cout << "harmonisation of depthdata complete\n";
 
     //noise.noisemap.swap(noise.seed);
 
-    noise.mesh();
+    //noise.mesh();
+    //noise.positionbasedmesh(0, 0, 500);
+    noise.positionbasedweirdmesh(0, 0, 500);
     //noise.generateweirdmesh();
     std::cout << "mesh generation complete\n";
-    std::cout << "there are "<< noise.width * 4 << " triangles currently loaded" << std::endl;
+    std::cout << "there are "<< noise.getwidth() * 4 << " triangles currently loaded" << std::endl;
 
     //create window
-    Win.INIT(int(720 * (16.f/9)), 720, false);
+    Win.INIT(1920, 1080, true);
     Win.setShaders("TransformVertexShader.vertexshader", "ColorFragmentShader.fragmentshader");
     Win.bindBuffers(&noise.vertecies, &noise.colours);
 
-    //std::thread first (test, this);
+    std::thread first (secondtest, this);
+
+    //pClockbegin(&test, 16);
 
     Win.Draw();
 
-    //first.join();
+    first.join();
+    //pClockend();
 
     return 0;
   }
@@ -63,16 +72,34 @@ class MAINLOOP
     std::cout << "I am a test to see whether or not this draw thing works" << std::endl;
 
     std::cout << "create new mesh"<< std::endl;
-    noise.mesh();
+    //noise.mesh();
     //noise.noisemap.swap(noise.seed);
     //noise.generateweirdmesh();
+    glm::mat4 ViewMatrix = Win.CamCon.getViewMatrix();
+    std::cout << "position data: " << ViewMatrix[0][0] << std::endl;
     std::cout << "binding new mesh" << std::endl;
-    sleepcp(5000);
-    Win.changeBufferData(&noise.vertecies, &noise.colours);
+    //sleepcp(5000);
+    //Win.changeBufferData(&noise.vertecies, &noise.colours);
     std::cout << "binding complete return normal opperation" << std::endl;
     std::cout << "buffer swapped in 10 second" << std::endl;
 
     return 0;
   }
+
+    int secondtest()
+    {
+        do
+        {
+            glm::vec3 posi = Win.CamCon.position;
+
+            std::cout << "pos : " << (int)posi[0] << " : " << (int)posi[0] << std::endl;
+
+            noise.positionbasedmesh((int)posi[0], (int)posi[2], 200);
+            //noise.positionbasedweirdmesh((int)posi[0], (int)posi[2], 200);
+            Win.changeBufferData(&noise.vertecies, &noise.colours);
+
+            //sleepcp(100);
+        }while(true);
+    }
 
 };
