@@ -72,7 +72,8 @@ public:
     NoiseGenerator() { srand(time(0)); }
 
     //create a vector of size width x width with only 0
-    std::vector<std::vector<GLfloat>> seedmap;
+    //std::vector<std::vector<GLfloat>> seedmap;
+    std::vector<GLfloat> seedmap;
     std::vector<std::vector<GLfloat>> noisemap;
 
     int range = 255;
@@ -102,9 +103,11 @@ public:
     {
 
         srand(time(0));
-        seedmap.resize(width, std::vector<GLfloat>(width));
+        //seedmap.resize(width, std::vector<GLfloat>(width));
+        seedmap.resize(width * range);
         noisemap.resize(width, std::vector<GLfloat>(width));
 
+        /*
         for(int i=0; i < width; ++i)
             for(int j=0; j < width; ++j)
             {
@@ -115,7 +118,10 @@ public:
                 //test with just a few highpoints
                 //seed[i][j] = rand() % (range);
                 //seed[i][j] += ((rand() % (range)) > ((range*8)/9)) * (range - seed[i][j]);
-            }
+            }*/
+        srand(rdmseed);
+        for(int i = 0; i < width*range; ++i)
+            seedmap[i] = (GLfloat) rand() / (RAND_MAX);// * range;// + (1/(rand() % range));
 
         //seed[width/2][width/2] = 0.5f;//std::max(rand() % (range/2), range/4);
     }
