@@ -63,7 +63,8 @@ private:
     {
 
         GLfloat out;
-        out = std::abs(std::sin(x * std::sin(y * rdmseed) + std::sin(rdmseed) + rdmseed));
+        //out = std::abs(std::sin(x * std::sin(y * rdmseed) + std::sin(rdmseed) + rdmseed));
+        out = seedmap[((x+x) * y) % (width * range)];
 
         return out;
     }
