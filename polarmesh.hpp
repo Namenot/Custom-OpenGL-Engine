@@ -11,19 +11,75 @@
 #include <string>
 #include <sstream>
 
-struct polar3d
+struct point3d
 {
-  unsigned int id;
-  unsigned int vertical;
-  unsigned int horizontal;
-  unsigned int distance;
+    std::array<GLfloat, 3> coordinates; // x / y / z coordinate of the point
+
+    std::vector<edge3d *> edges;        // every edge that is connected to this point
+    std::vector<face3d *> triangles;    // every triangle this point is a part of
+
 };
 
-struct map3d
+struct edge3d
 {
-    double pos[3]; // (x/y/z)
-    double color[4]; // [r, g, b, alpha]
-    int adjacent[3]; //made off the id's of the 3 adjacent Triangles
+    float score = 1;                   // scores the edge in terms of its collapsibility
+
+    std::array<point3d *, 2> points;   // both points which together make the edge
+    std::array<face3d *, 2> triangles; // both triangles adjacent to the edge
+
+};
+
+struct face3d
+{
+    std::array<point3d *, 3> points; // the 3 points that make the triangle
+
+};
+
+class MeshSorter
+{
+/*
+works by sorting every point by its distance to 3 root points in space
+1.0) sort each point by its distance to all 3 points
+1.1) each points gets a "strong" and a "weak" distance assigned (one is precise and the other is set to a fixed radial "ring" with origin (1, 2, 3) as its center)
+
+2.0) hash function:
+2.1) set a definitive hash for each point (probably just its index)
+2.3) pick a point in space and calculate its distance to each point
+
+*/
+private:
+
+    std::array<GLfloat, 3> origin = {0,0,0};
+    std::array<GLfloat, 3> renderposition; //position arround which you want to draw
+
+    std::vector<std::array<GLfloat, 4>> points; //distance to origin, x, y, z
+
+    GLfloat calc_distance(std::array<GLfloat, 3> p1, std::array<GLfloat, 3> p2)
+    {
+        return std::sqrt(std::pow(p1[0] - p2[0]) + std::pow(p1[1] - p2[1]) + std::pow(p1[2] - p2[2]));
+    }
+
+    void sort_mesh()
+    {
+        /*
+        radix sort points by there distance to origin
+        */
+    }
+
+public:
+    MeshSorter()
+    {
+
+    }
+
+    void set_origin(GLfloat x, GLfloat y, GLfloat z)
+    {
+        origin[0] = x;
+        origin[1] = y;
+        origin[2] = z;
+        sort_mesh();
+    }
+
 };
 
 class MeshProcessor
@@ -37,6 +93,10 @@ private:
 
 public:
 
+    MeshProcessor()
+    {
+
+    }
 
 
     //this should be put into a constructor so that a change of degree is possible at creation
@@ -61,7 +121,7 @@ public:
         //and remove a
     }
 
-    void rateedge()
+    void scoreedge(edge3d * edg)
     {
         //gives each edge a score based rating,
         //depending on factors like:
@@ -71,5 +131,4 @@ public:
         // - difference between normal vectors of adjacent triangles to the edge
     }
 
-    void
 };
