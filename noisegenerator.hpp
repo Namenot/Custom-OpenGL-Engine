@@ -6,6 +6,8 @@
 #include <vector>
 #include <array>
 
+#include <thread>
+
 #include <cmath>
 
 
@@ -14,7 +16,7 @@ class NoiseGenerator
 private:
 
     int width;
-    int maxoctaves;
+    int maxoctaves = 1;
 
     GLfloat interp(GLfloat val1, GLfloat val2, int posbetween, int lengthbetween)
     {
@@ -24,13 +26,11 @@ private:
         return out;
     }
 
-    float sample(int x, int y, int oct)
+    GLfloat sample(int x, int y, int oct)
     {
-        float out = 0.0f;
-        int rate = width;
 
-        //for(int i = 0; i < oct; ++i)
-            //rate = rate/2;
+        GLfloat out = 0.f;
+        int rate = width;
 
         rate = rate / std::pow(2, oct);
 
@@ -40,16 +40,10 @@ private:
         int y0 = (y / rate) * rate;
         int y1 = (y0 + rate) % width;
 
-        //float interpx = interp(seed[x0][y0], seed[x1][y0], x % rate, rate);
-        //float interpy = interp(seed[x0][y1], seed[x1][y1], x % rate, rate);
-
-        float interpx = interp(seed(x0,y0), seed(x1,y0), x % rate, rate);
-        float interpy = interp(seed(x0,y1), seed(x1,y1), x % rate, rate);
+        GLfloat interpx = interp(seedmap[x0][y0], seedmap[x1][y0], x % rate, rate);
+        GLfloat interpy = interp(seedmap[x0][y1], seedmap[x1][y1], x % rate, rate);
 
         out = interp(interpx, interpy, y % rate, rate) / std::pow(2, oct);
-
-        //std::cout << "out : " << out << std::endl;
-        //std::cout << "norm: " << normalizer << std::endl;
 
         return out;
     }
@@ -63,8 +57,7 @@ private:
     {
 
         GLfloat out;
-        //out = std::abs(std::sin(x * std::sin(y * rdmseed) + std::sin(rdmseed) + rdmseed));
-        out = seedmap[((x+x) * y) % (width * range)];
+        //out = seedmap[((x+x) * y) % (width * range)]; //maybe be
 
         return out;
     }
@@ -74,7 +67,7 @@ public:
 
     //create a vector of size width x width with only 0
     //std::vector<std::vector<GLfloat>> seedmap;
-    std::vector<GLfloat> seedmap;
+    std::vector<std::vector<GLfloat>> seedmap;
     std::vector<std::vector<GLfloat>> noisemap;
 
     int range = 255;
@@ -103,28 +96,15 @@ public:
     void generateseed()
     {
 
-        srand(time(0));
-        //seedmap.resize(width, std::vector<GLfloat>(width));
-        seedmap.resize(width * range);
+        srand(rdmseed);
+        seedmap.resize(width, std::vector<GLfloat>(width));
         noisemap.resize(width, std::vector<GLfloat>(width));
 
-        /*
+
         for(int i=0; i < width; ++i)
             for(int j=0; j < width; ++j)
-            {
-                seedmap[i][j] = (GLfloat) rand() / (RAND_MAX);// * range;// + (1/(rand() % range));
-                //seed[i][j] += range * (i == 0|| j == 0 || j == width-1|| i == width-1);
-                //seed[i][j] -=  (seed[i][j]/1) * (i == 0|| j == 0 || j == width-1|| i == width-1);
+                seedmap[i][j] = (GLfloat)rand() / (RAND_MAX);
 
-                //test with just a few highpoints
-                //seed[i][j] = rand() % (range);
-                //seed[i][j] += ((rand() % (range)) > ((range*8)/9)) * (range - seed[i][j]);
-            }*/
-        srand(rdmseed);
-        for(int i = 0; i < width*range; ++i)
-            seedmap[i] = (GLfloat) rand() / (RAND_MAX);// * range;// + (1/(rand() % range));
-
-        //seed[width/2][width/2] = 0.5f;//std::max(rand() % (range/2), range/4);
     }
 
     void randomizeseed()
@@ -142,13 +122,14 @@ public:
         x = (width*(x<0)) + (x % width);
         y = (width*(y<0)) + (y % width);
 
-        float out = 0.0f;
+        GLfloat out = 0.0f;
         int i;
 
         //aplies one octave after the other ... could technically be in paralel
         for(i = 0; i <= std::min(maxoctaves, octaves); ++i)
         {
             out += sample(x,y, i); //position(x,y), current octave
+            //threads[i] = std::thread(sample,this, x, y, i, &sampled[i]);
         }
 
         return out;
@@ -156,9 +137,12 @@ public:
 
     GLfloat noisedata(int x, int y)
     {
-        //make sure that x and y are in bounds and are looping back on themselves
-        x = (width*(x<0)) + (x % width);
-        y = (width*(y<0)) + (y % width);
+        //make sure that x and y are in bounds and are looping back on themselvesww
+        x %= width;
+        x += width*(x<0);
+
+        y %= width;
+        y += width*(y<0);
 
         return (noisemap[x][y] - smallest) * range;
     }
@@ -296,6 +280,7 @@ public:
 
         vertecies.clear();
         colours.clear();
+
 
         maxdist -= maxdist % 2;
         maxdist = std::max(2, maxdist);
@@ -449,27 +434,47 @@ public:
 
     void positionbasedmesh(int posx, int posy, int maxdist)
     {
-        srand(time(0));
-
         vertecies.clear();
         colours.clear();
 
-        maxdist -= maxdist % 2;
-        maxdist = std::max(2, maxdist);
+        int rate = width;
+        rate = rate / std::pow(2, std::min(maxoctaves, octaves));
+        //std::cout << "rate    : " << rate << std::endl;
+        //std::cout << "maxoct  : " << maxoctaves <<std::endl;
 
+        maxdist -= maxdist % rate;
+        maxdist = std::max(rate, maxdist);
+        //std::cout << "maxdist : " << maxdist <<std::endl;
+
+        //std::array<std::thread, 8> tArray;
+
+        int vsize = maxdist*maxdist*8*9 + 18;
+
+        if(vertecies.size() != vsize)
+        {
+            vertecies.resize(vsize);
+            colours.resize(vsize);
+        }
+
+        std::array<GLfloat, 3> nValues = {0, 0, 0};
+
+        /*
+        possible combinations: 8
+            - (-1,-1) / (-1, 0) / center
+            - (-1, 0) / (-1, 1) / center
+            - (-1, 1) / ( 0, 1) / center
+            - ( 0, 1) / ( 1, 1) / center
+            - ( 1, 1) / ( 1, 0) / center
+            - ( 1, 0) / ( 1,-1) / center
+            - ( 1,-1) / ( 0,-1) / center
+            - ( 0,-1) / (-1,-1) / center
+        */
         std::array<std::array<int, 2>, 8> pointoffsets
         {
-            /*possible combinations: 8
-                - (-1,-1) / (-1, 0) / center
-                - (-1, 0) / (-1, 1) / center
-                - (-1, 1) / ( 0, 1) / center
-                - ( 0, 1) / ( 1, 1) / center
-                - ( 1, 1) / ( 1, 0) / center
-                - ( 1, 0) / ( 1,-1) / center
-                - ( 1,-1) / ( 0,-1) / center
-                - ( 0,-1) / (-1,-1) / center
-            */
-            {{-1,-1}, {-1,0}, {-1,1}, {0,1}, {1,1}, {1,0}, {1,-1}, {0,-1}}
+            {{-1,-1}, {-1, 0},
+             {-1, 1}, { 0, 1},
+             { 1, 1}, { 1, 0},
+             { 1,-1}, { 0,-1}}
         };
 
         int newx1;
@@ -477,52 +482,48 @@ public:
         int newy1;
         int newy2;
 
-        for(int x = posx - (maxdist/2); x < posx + (maxdist/2); x += 2)
-            for(int y = posy - (maxdist/2); y < posy + (maxdist/2); y += 2)
+        posx -= maxdist/2;
+        posy -= maxdist/2;
+
+        posx -= posx % rate;
+        posy -= posy % rate;
+
+        for(int x = posx; x < posx + maxdist; x += rate)
+            for(int y = posy; y < posy + maxdist; y += rate)
+            {
+                nValues[0] = noisedata(x, y);
+
                 for(int i = 0; i < 8; ++i)
                 {
                     //set new points
-                    newx1 = x + pointoffsets[i][0];
-                    newy1 = y + pointoffsets[i][1];
-                    newx2 = x + pointoffsets[(i+1) % 8][0];
-                    newy2 = y + pointoffsets[(i+1) % 8][1];
+                    newx1 = x + (pointoffsets[i][0] * rate);
+                    newy1 = y + (pointoffsets[i][1] * rate);
+                    newx2 = x + (pointoffsets[(i+1) % 8][0] * rate);
+                    newy2 = y + (pointoffsets[(i+1) % 8][1] * rate);
 
-                    //check if new points are valid
-                    if(newx1 < 0){continue;}
-                    if(newy1 < 0){continue;}
-                    if(newx2 < 0){continue;}
-                    if(newy2 < 0){continue;}
+                    nValues[1] = noisedata(newx1,newy1);
+                    nValues[2] = noisedata(newx2,newy2);
+
+                    //std::cout << nValues[0] << " " << nValues[1] << " " << nValues[2] << std::endl;
 
                     vertecies.push_back(newx1);
-                    vertecies.push_back(noisevalue(newx1,newy1) * range);
+                    vertecies.push_back(nValues[1]);
                     vertecies.push_back(newy1);
 
                     vertecies.push_back(newx2);
-                    vertecies.push_back(noisevalue(newx2,newy2) * range);
+                    vertecies.push_back(nValues[2]);
                     vertecies.push_back(newy2);
 
                     vertecies.push_back(x);
-                    vertecies.push_back(noisevalue(x,y)* range);
+                    vertecies.push_back(nValues[0]);
                     vertecies.push_back(y);
 
+                    GLfloat avg = std::abs(nValues[0] + nValues[1] + nValues[2]) /3;
+
                     //assign colours
-                    GLfloat c1 = 1.0f / ((rand() % 7)+0.1); //Red
-                    GLfloat c2 = 1.0f / ((rand() % 3)+0.1); //Green
-                    GLfloat c3 = 0.1f;                      //Blue
-
-                    //colour 1
-                    c1 = 0.4 * (avgheight(avgheight(noisevalue(newx1,newy1),noisevalue(newx2,newy2)), noisevalue(x,y)) < range * oceanfract);
-                    c2 = avgheight(avgheight(noisevalue(newx1,newy1),noisevalue(newx2,newy2)), noisevalue(x,y)) / range * (avgheight(avgheight(noisevalue(newx1,newy1),noisevalue(newx2,newy2)), noisevalue(x,y)) >= range * oceanfract);
-
-                    float avg;// = avgheight(avgheight(noisedata(x,y), noisedata(newx2,newy2)), noisedata(newx1,newy1));
-                    avg = std::max(std::max(noisevalue(x,y), noisevalue(newx2,newy2)), noisevalue(newx1,newy1));
-                    float mStart = mountainfreq-0.2f;// - ((rand() % 100) / 100);
-
-                    c2 += (1 - (c2*2)) * (avg > range / mStart);
-                    c2 -= 0.6*c2*(avg > range / mStart);
-
-                    c1 -= (c1-std::abs(c2-c1))*(avg > range / mStart);
-                    c3 -= (c3-std::abs(c2-c3))*(avg > range / mStart);
+                    GLfloat c1 = 0.4 * (avg < range * 2/7);
+                    GLfloat c2 = avg / range * (avg >= range * 2/7) ;
+                    GLfloat c3 = 0.1f;
 
                     colours.push_back(c3);
                     colours.push_back(c2);
@@ -536,5 +537,6 @@ public:
                     colours.push_back(c2);
                     colours.push_back(c1);
                 }
+            }
     }
 };
