@@ -1,6 +1,6 @@
 # CMake entry point
 cmake_minimum_required (VERSION 3.0)
-project (Tutorials)
+project (3D Engine)
 
 find_package(OpenGL REQUIRED)
 
@@ -31,7 +31,7 @@ if(INCLUDE_DISTRIB)
 endif(INCLUDE_DISTRIB)
 
 
-
+#no idea whether i need this
 include_directories(
 	external/AntTweakBar-1.16/include/
 	external/glfw-3.1.2/include/
