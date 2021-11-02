@@ -62,6 +62,7 @@ add_definitions(
 add_executable(3D_Engine
 	#main target
 	3D_Engine/main.cpp
+	3D_Engine/mainloop.hpp
 
 	#my headers
 	3D_Engine/customheaders/camcontroller.hpp
@@ -69,7 +70,6 @@ add_executable(3D_Engine
 
 	#my headers (not properly defined)
 	3D_Engine/customheaders/allheaders.hpp
-	3D_Engine/customheaders/mainloop.hpp
 	3D_Engine/customheaders/mesh.hpp
 	3D_Engine/customheaders/basewindow.hpp
 	3D_Engine/customheaders/noisegenerator.hpp
@@ -108,7 +108,7 @@ SOURCE_GROUP(shaders REGULAR_EXPRESSION ".*/.*shader$" )
 if (NOT ${CMAKE_GENERATOR} MATCHES "Xcode" )
 add_custom_command(
    TARGET 3D_Engine POST_BUILD
-   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/3D_Engine${CMAKE_EXECUTABLE_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}/3D_Engine/"
+   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/3D_Engine${CMAKE_EXECUTABLE_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}/3D_Engine/bin"
 )
 
 elseif (${CMAKE_GENERATOR} MATCHES "Xcode" )

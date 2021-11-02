@@ -8,8 +8,8 @@
 #include <chrono>
 
 // test the clock
-#include "Clockclass.hpp"
-#include "noisegenerator.hpp"
+#include "customheaders/Clockclass.hpp"
+#include "customheaders/noisegenerator.hpp"
 
 
 class MAINLOOP

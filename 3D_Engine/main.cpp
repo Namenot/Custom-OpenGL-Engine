@@ -10,12 +10,12 @@
 #include <glm/glm.hpp>
 
 //include the threaded clock
-#include "pclock.hpp"
+#include "customheaders/pclock.hpp"
 // include terminal
-#include "terminal.hpp"
+#include "customheaders/terminal.hpp"
 // include the base window function
 //#include "basewindow.hpp"
-#include "renderer.hpp"
+#include "customheaders/renderer.hpp"
 // include gamescript
 #include "mainloop.hpp"
 
