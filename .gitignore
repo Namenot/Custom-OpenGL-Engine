@@ -1005,3 +1005,5 @@ build/external/glfw-3.1.2/tests/CMakeFiles/windows.dir/flags.make
 build/external/glfw-3.1.2/tests/CMakeFiles/windows.dir/link.txt
 build/external/glfw-3.1.2/tests/CMakeFiles/windows.dir/progress.make
 build/external/glfw-3.1.2/tests/CMakeFiles/windows.dir/windows.c.o
+build.sh
+3D_Engine/3D_Engine

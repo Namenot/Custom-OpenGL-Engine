@@ -1,6 +1,8 @@
 # CMake entry point
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.1)
 project (3D_Engine)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -o3")
 
 find_package(OpenGL REQUIRED)
 
@@ -59,25 +61,25 @@ add_definitions(
 #main build
 add_executable(3D_Engine
 	#main target
-	main.cpp
+	3D_Engine/main.cpp
 
 	#my headers
-	camcontroller.hpp
+	3D_Engine/camcontroller.hpp
 	#camcontrolls.cpp
 
 	#my headers (not properly defined)
-	allheaders.hpp
-	mainloop.hpp
-	mesh.hpp
-	basewindow.hpp
-	noisegenerator.hpp
-	pclock.hpp
-	perlinnoisegenerator.hpp
-	Clockclass.hpp
-	polarmesh.hpp
-	renderer.hpp
-	terminal.hpp
-	meshdivider.hpp
+	3D_Engine/allheaders.hpp
+	3D_Engine/mainloop.hpp
+	3D_Engine/mesh.hpp
+	3D_Engine/basewindow.hpp
+	3D_Engine/noisegenerator.hpp
+	3D_Engine/pclock.hpp
+	3D_Engine/perlinnoisegenerator.hpp
+	3D_Engine/Clockclass.hpp
+	3D_Engine/polarmesh.hpp
+	3D_Engine/renderer.hpp
+	3D_Engine/terminal.hpp
+	3D_Engine/meshdivider.hpp
 
 	#external headers
 	common/shader.cpp
@@ -87,8 +89,8 @@ add_executable(3D_Engine
 
 
 	#shaders (needs to be shifted into a seperat folder)
-	TransformVertexShader.vertexshader
-	ColorFragmentShader.fragmentshader
+	3D_Engine/TransformVertexShader.vertexshader
+	3D_Engine/ColorFragmentShader.fragmentshader
 
 )
 
@@ -96,8 +98,8 @@ target_link_libraries(3D_Engine
 	${ALL_LIBS}
 )
 # Xcode and Visual working directories
-set_target_properties(3D_Engine PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/")
-create_target_launcher(3D_Engine WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/")
+set_target_properties(3D_Engine PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3D_Engine/")
+create_target_launcher(3D_Engine WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/3D_Engine/")
 
 
 SOURCE_GROUP(common REGULAR_EXPRESSION ".*/common/.*" )
@@ -106,7 +108,7 @@ SOURCE_GROUP(shaders REGULAR_EXPRESSION ".*/.*shader$" )
 if (NOT ${CMAKE_GENERATOR} MATCHES "Xcode" )
 add_custom_command(
    TARGET 3D_Engine POST_BUILD
-   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_EXECUTABLE_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}/"
+   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/3D_Engine${CMAKE_EXECUTABLE_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}/3D_Engine/"
 )
 
 elseif (${CMAKE_GENERATOR} MATCHES "Xcode" )
