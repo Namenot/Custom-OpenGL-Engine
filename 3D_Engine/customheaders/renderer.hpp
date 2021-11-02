@@ -151,8 +151,8 @@ public:
         vertexsize = vertecies.size()*sizeof(GLfloat);
         colorsize = colors.size()*sizeof(GLfloat);
 
-        std::cout << "vertexsize: " << vertexsize << std::endl;
-        std::cout << "triangles: " << vertecies.size() / 3  << std::endl;
+        //std::cout << "vertexsize: " << vertexsize << std::endl;
+        //std::cout << "triangles: " << vertecies.size() / 3  << std::endl;
 
         changed = true;
     }
@@ -186,8 +186,8 @@ public:
             double currentTime = glfwGetTime();
             nbFrames++;
              if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1 sec ago
-                 // printf and reset timer
-                 printf("%f ms/frame\n", 1000.0/double(nbFrames));
+                 //printf and reset timer
+                 //printf("%f ms/frame\n", 1000.0/double(nbFrames));
                  nbFrames = 0;
                  lastTime += 1.0;
              }

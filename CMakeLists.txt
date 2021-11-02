@@ -1,5 +1,16 @@
 # CMake entry point
 cmake_minimum_required (VERSION 3.1)
+
+#compiler options
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-Ofast")
+
+#project name
 project (3D_Engine)
 
 find_package(OpenGL REQUIRED)
@@ -106,7 +117,7 @@ SOURCE_GROUP(shaders REGULAR_EXPRESSION ".*/.*shader$" )
 if (NOT ${CMAKE_GENERATOR} MATCHES "Xcode" )
 add_custom_command(
    TARGET 3D_Engine POST_BUILD
-   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/3D_Engine${CMAKE_EXECUTABLE_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}/3D_Engine/bin"
+   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/3D_Engine${CMAKE_EXECUTABLE_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}/3D_Engine"
 )
 
 elseif (${CMAKE_GENERATOR} MATCHES "Xcode" )

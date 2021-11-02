@@ -64,11 +64,10 @@ class MAINLOOP
 
     //create window
     Win.INIT(1920, 1080, true);
-    Win.setShaders("TransformVertexShader.vertexshader", "ColorFragmentShader.fragmentshader");
+    Win.setShaders("shaders/TransformVertexShader.vertexshader", "shaders/ColorFragmentShader.fragmentshader");
     Win.bindBuffers(&noise.vertecies, &noise.colours);
 
     std::thread first (&MAINLOOP::secondtest, this);
-
     //pClockbegin(&test, 16);
 
     Win.Draw();
@@ -76,6 +75,7 @@ class MAINLOOP
     terminate = 1;
 
     first.join();
+
     //pClockend();
 
     return 0;
@@ -104,13 +104,11 @@ class MAINLOOP
   {
       int oldx = (int)Win.CamCon.position[0];
       int oldy = (int)Win.CamCon.position[2];
-      int maxdist = 800;
+      int maxdist = 400;
 
       do
       {
         glm::vec3 posi = Win.CamCon.position;
-
-        //std::cout << "pos : " << (int)posi[0] << " : " << (int)posi[2] << std::endl;
 
         if(std::abs((int)posi[0] - oldx) > maxdist / 4 || std::abs((int)posi[2] - oldy) > maxdist / 4)
         {
