@@ -64,22 +64,22 @@ add_executable(3D_Engine
 	3D_Engine/main.cpp
 
 	#my headers
-	3D_Engine/camcontroller.hpp
+	3D_Engine/customheaders/camcontroller.hpp
 	#camcontrolls.cpp
 
 	#my headers (not properly defined)
-	3D_Engine/allheaders.hpp
-	3D_Engine/mainloop.hpp
-	3D_Engine/mesh.hpp
-	3D_Engine/basewindow.hpp
-	3D_Engine/noisegenerator.hpp
-	3D_Engine/pclock.hpp
-	3D_Engine/perlinnoisegenerator.hpp
-	3D_Engine/Clockclass.hpp
-	3D_Engine/polarmesh.hpp
-	3D_Engine/renderer.hpp
-	3D_Engine/terminal.hpp
-	3D_Engine/meshdivider.hpp
+	3D_Engine/customheaders/allheaders.hpp
+	3D_Engine/customheaders/mainloop.hpp
+	3D_Engine/customheaders/mesh.hpp
+	3D_Engine/customheaders/basewindow.hpp
+	3D_Engine/customheaders/noisegenerator.hpp
+	3D_Engine/customheaders/pclock.hpp
+	3D_Engine/customheaders/perlinnoisegenerator.hpp
+	3D_Engine/customheaders/Clockclass.hpp
+	3D_Engine/customheaders/polarmesh.hpp
+	3D_Engine/customheaders/renderer.hpp
+	3D_Engine/customheaders/terminal.hpp
+	3D_Engine/customheaders/meshdivider.hpp
 
 	#external headers
 	common/shader.cpp
@@ -89,8 +89,8 @@ add_executable(3D_Engine
 
 
 	#shaders (needs to be shifted into a seperat folder)
-	3D_Engine/TransformVertexShader.vertexshader
-	3D_Engine/ColorFragmentShader.fragmentshader
+	3D_Engine/shaders/TransformVertexShader.vertexshader
+	3D_Engine/shaders/ColorFragmentShader.fragmentshader
 
 )
 
