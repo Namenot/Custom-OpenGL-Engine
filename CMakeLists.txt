@@ -2,8 +2,6 @@
 cmake_minimum_required (VERSION 3.1)
 project (3D_Engine)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -o3")
-
 find_package(OpenGL REQUIRED)
 
 

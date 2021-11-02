@@ -1126,3 +1126,4 @@ build/CMakeFiles/Progress/28
 build/CMakeFiles/Progress/29
 build/CMakeFiles/Progress/30
 3D_Engine/bin
+build/external/glfw-3.1.2/CMakeFiles/Export/lib/cmake/glfw/glfwTargets-release.cmake
