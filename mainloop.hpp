@@ -67,7 +67,7 @@ class MAINLOOP
     Win.setShaders("TransformVertexShader.vertexshader", "ColorFragmentShader.fragmentshader");
     Win.bindBuffers(&noise.vertecies, &noise.colours);
 
-    std::thread first (secondtest, this);
+    //std::thread first (secondtest, this);
 
     //pClockbegin(&test, 16);
 
@@ -75,7 +75,7 @@ class MAINLOOP
 
     terminate = 1;
 
-    first.join();
+    //first.join();
     //pClockend();
 
     return 0;
@@ -100,33 +100,33 @@ class MAINLOOP
     return 0;
   }
 
-    int secondtest()
-    {
-        int oldx = (int)Win.CamCon.position[0];
-        int oldy = (int)Win.CamCon.position[2];
-        int maxdist = 800;
+  int secondtest()
+  {
+      int oldx = (int)Win.CamCon.position[0];
+      int oldy = (int)Win.CamCon.position[2];
+      int maxdist = 800;
 
-        do
+      do
+      {
+        glm::vec3 posi = Win.CamCon.position;
+
+        //std::cout << "pos : " << (int)posi[0] << " : " << (int)posi[2] << std::endl;
+
+        if(std::abs((int)posi[0] - oldx) > maxdist / 4 || std::abs((int)posi[2] - oldy) > maxdist / 4)
         {
-            glm::vec3 posi = Win.CamCon.position;
+            noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist);
+            //noise.positionbasedweirdmesh((int)posi[0], (int)posi[2], 500);
+            Win.changeBufferData(&noise.vertecies, &noise.colours);
 
-            //std::cout << "pos : " << (int)posi[0] << " : " << (int)posi[2] << std::endl;
+            oldx = (int)posi[0];
+            oldy = (int)posi[2];
+            sleepcp(500);
+        }
 
-            if(std::abs((int)posi[0] - oldx) > maxdist / 4 || std::abs((int)posi[2] - oldy) > maxdist / 4)
-            {
-                noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist);
-                //noise.positionbasedweirdmesh((int)posi[0], (int)posi[2], 500);
-                Win.changeBufferData(&noise.vertecies, &noise.colours);
+      }while(terminate == 0);
 
-                oldx = (int)posi[0];
-                oldy = (int)posi[2];
-                sleepcp(500);
-            }
-
-        }while(terminate == 0);
-
-        return 0;
-    }
+      return 0;
+  }
 
     void loopthrough()
     {
