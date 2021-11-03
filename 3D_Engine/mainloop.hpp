@@ -28,15 +28,13 @@ class MAINLOOP
   {
 
     // test (inheritance)
-    term.test = 10;
-    std::cout << term.test << std::endl;
-    pClockbegin(c, 16);
-    pClockbegin(c, 32);
-    pClockend();
-    loopthrough();
+    //term.test = 10;
+    //std::cout << term.test << std::endl;
+    //pClockbegin(c, 16);
+    //pClockbegin(c, 32);
+    //pClockend();
+    //loopthrough();
     // end test
-
-    std::cout << "compiler test!\n";
 
     //noise:
     noise.setwidth(256);
@@ -46,8 +44,6 @@ class MAINLOOP
     noise.rdmseed = 234;
     //noise.randomizeseed();
     noise.generateseed();
-    std::cout << -2049 % 2048 << std::endl;
-    sleepcp(5000);
     std::cout << "seed creation complete (" << noise.rdmseed << ")\n";
 
     auto Tbegin = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
@@ -121,8 +117,8 @@ class MAINLOOP
 
             oldx = (int)posi[0];
             oldy = (int)posi[2];
-            sleepcp(500);
         }
+        sleepcp(500);
 
       }while(terminate == 0);
 
