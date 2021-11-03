@@ -37,11 +37,11 @@ class MAINLOOP
     // end test
 
     //noise:
-    noise.setwidth(256);
-    noise.range = 70;
-    noise.octaves = 3;
+    noise.setwidth(1024);
+    noise.range = 400;
+    noise.octaves = 7;
     noise.oceanfract = 1.f/7;
-    noise.rdmseed = 234;
+    noise.rdmseed = 87469;
     //noise.randomizeseed();
     noise.generateseed();
     std::cout << "seed creation complete (" << noise.rdmseed << ")\n";
