@@ -1,3 +1,6 @@
+#ifndef RENDERER_HPP
+#define RENDERER_HPP
+
 // include standart headers
 #include <iostream>
 #include <stdio.h>
@@ -258,3 +261,5 @@ public:
     }
 
 };
+
+#endif

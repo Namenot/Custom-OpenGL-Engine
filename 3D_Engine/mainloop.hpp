@@ -1,3 +1,6 @@
+#ifndef MAINLOOP_HPP
+#define MAINLOOP_HPP
+
 // include standart headers
 #include <iostream>
 #include <stdio.h>
@@ -145,3 +148,5 @@ class MAINLOOP
     }
 
 };
+
+#endif

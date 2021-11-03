@@ -75,26 +75,19 @@ add_executable(3D_Engine
 
 	#my headers
 	3D_Engine/customheaders/camcontroller.hpp
-	#camcontrolls.cpp
 
 	#my headers (not properly defined)
-	3D_Engine/customheaders/allheaders.hpp
 	3D_Engine/customheaders/mesh.hpp
-	3D_Engine/customheaders/basewindow.hpp
 	3D_Engine/customheaders/noisegenerator.hpp
 	3D_Engine/customheaders/pclock.hpp
-	3D_Engine/customheaders/perlinnoisegenerator.hpp
 	3D_Engine/customheaders/Clockclass.hpp
 	3D_Engine/customheaders/polarmesh.hpp
 	3D_Engine/customheaders/renderer.hpp
 	3D_Engine/customheaders/terminal.hpp
-	3D_Engine/customheaders/meshdivider.hpp
 
 	#external headers
 	common/shader.cpp
 	common/shader.hpp
-	#common/controls.cpp
-	#common/controls.hpp
 
 
 	#shaders (needs to be shifted into a seperat folder)

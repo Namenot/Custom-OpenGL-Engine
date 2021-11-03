@@ -14,7 +14,6 @@
 // include terminal
 #include "customheaders/terminal.hpp"
 // include the base window function
-//#include "basewindow.hpp"
 #include "customheaders/renderer.hpp"
 // include gamescript
 #include "mainloop.hpp"

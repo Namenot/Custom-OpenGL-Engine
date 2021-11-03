@@ -1,3 +1,6 @@
+#ifndef PCLOCK_HPP
+#define PCLOCK_HPP
+
 #include <iostream>
 
 #include <pthread.h>
@@ -75,3 +78,5 @@ void pClockend()
   memset(pClock::ClockThreadList, 0, sizeof(pClock::ClockThreadList));
 
 }
+
+#endif

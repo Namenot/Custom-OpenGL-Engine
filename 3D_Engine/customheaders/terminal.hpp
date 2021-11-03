@@ -1,3 +1,6 @@
+#ifndef TERMINAL_HPP
+#define TERMINAL_HPP
+
 #include "mesh.hpp"
 
 // terminal is a set variables that can changed from anywhere in the code
@@ -27,3 +30,5 @@ public:
     int maxfps = 144;
     int fov = 90; // the cameras field of view
 };
+
+#endif

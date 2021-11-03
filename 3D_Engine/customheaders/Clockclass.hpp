@@ -1,3 +1,6 @@
+#ifndef CLOGGER_HPP
+#define CLOGGER_HPP
+
 class clogger
 {
 public:
@@ -11,3 +14,5 @@ public:
     return false;
   }
 };
+
+#endif

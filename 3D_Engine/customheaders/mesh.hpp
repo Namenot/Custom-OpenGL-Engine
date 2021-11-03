@@ -1,3 +1,6 @@
+#ifndef MESH_HPP
+#define MESH_HPP
+
 #include <iostream>
 #include <cstddef> // std::size_t
 #include<bits/stdc++.h>
@@ -148,7 +151,7 @@ anything that has the potential to leave a loaded area
         }
 
         int polarlen = 360;
-        int *polars = new int[polarlen](); // 0° = polarlen°
+        int *polars = new int[polarlen](); // 0ï¿½ = polarlenï¿½
 
         for(auto & elem : *(in))
         {
@@ -200,6 +203,8 @@ anything that has the potential to leave a loaded area
     }
 
 };
+
+#endif
 
 /*
 i want to be able to :

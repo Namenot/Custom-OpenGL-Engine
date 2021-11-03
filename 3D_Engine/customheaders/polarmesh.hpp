@@ -1,3 +1,6 @@
+#ifndef POLARMESH_HPP
+#define POLARMESH_HPP
+
 #include <iostream>
 #include <cstddef> // std::size_t
 #include<bits/stdc++.h>
@@ -255,3 +258,5 @@ public:
     }
 
 };
+
+#endif
