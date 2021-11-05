@@ -437,13 +437,16 @@ public:
 
     void positionbasedmesh(int posx, int posy, int maxdist)
     {
+        //rate is set to the resolution the lowest sampler
         int rate = width;
         rate = rate / std::pow(2, std::min(maxoctaves, octaves));
 
+        //maxdist must be a multiple of rate
         maxdist -= maxdist % rate;
         maxdist = std::max(rate, maxdist);
 
-        unsigned int vsize = maxdist*maxdist*8*9;
+        //vsize is equal to the amount of data that is placed in the vector
+        unsigned int vsize = maxdist*maxdist*4*9;
 
         if(vertecies.size() != vsize)
         {
@@ -493,13 +496,14 @@ public:
             {
                 nValues[0] = noisedata(x, y);
 
-                for(int i = 0; i < 8; ++i)
+                for(int i = 0; i < 2; ++i)
                 {
-                    //set new points
-                    newx1 = x + (pointoffsets[i][0] * rate);
-                    newy1 = y + (pointoffsets[i][1] * rate);
-                    newx2 = x + (pointoffsets[(i+1) % 8][0] * rate);
-                    newy2 = y + (pointoffsets[(i+1) % 8][1] * rate);
+                    
+                    //set new point
+                    newx1 = x + (pointoffsets[i*4][0] * rate);
+                    newy1 = y + (pointoffsets[i*4][1] * rate);
+                    newx2 = x + (pointoffsets[(i*4+1) % 8][0] * rate);
+                    newy2 = y + (pointoffsets[(i*4+1) % 8][1] * rate);
 
                     nValues[1] = noisedata(newx1,newy1);
                     nValues[2] = noisedata(newx2,newy2);

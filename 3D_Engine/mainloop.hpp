@@ -28,9 +28,9 @@ class MAINLOOP
   {
 
     //noise:
-    noise.setwidth(1024);
+    noise.setwidth(2048);
     noise.range = 400;
-    noise.octaves = 7;
+    noise.octaves = 10;
     noise.oceanfract = 1.f/7;
     noise.rdmseed = 87469;
     noise.generateseed();
@@ -53,13 +53,13 @@ class MAINLOOP
     Win.setShaders("shaders/TransformVertexShader.vertexshader", "shaders/ColorFragmentShader.fragmentshader");
     Win.bindBuffers(&noise.vertecies, &noise.colours);
 
-    //std::thread first (&MAINLOOP::secondtest, this);
+    std::thread first (&MAINLOOP::secondtest, this);
     //pClockbegin(&test, 16);
 
     Win.Draw();
     terminate = true;
 
-    //first.join();
+    first.join();
 
     //pClockend();
 
@@ -88,7 +88,7 @@ class MAINLOOP
   {
       int oldx = (int)Win.CamCon.position[0];
       int oldy = (int)Win.CamCon.position[2];
-      int maxdist = 600;
+      int maxdist = 700;
 
       do
       {
