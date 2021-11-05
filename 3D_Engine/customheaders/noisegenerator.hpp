@@ -437,24 +437,19 @@ public:
 
     void positionbasedmesh(int posx, int posy, int maxdist)
     {
-        vertecies.clear();
-        colours.clear();
-
         int rate = width;
         rate = rate / std::pow(2, std::min(maxoctaves, octaves));
-        //std::cout << "rate    : " << rate << std::endl;
-        //std::cout << "maxoct  : " << maxoctaves <<std::endl;
 
         maxdist -= maxdist % rate;
         maxdist = std::max(rate, maxdist);
-        //std::cout << "maxdist : " << maxdist <<std::endl;
 
-        //std::array<std::thread, 8> tArray;
-
-        int vsize = maxdist*maxdist*8*9 + 18;
+        unsigned int vsize = maxdist*maxdist*8*9;
 
         if(vertecies.size() != vsize)
         {
+            vertecies.clear();
+            colours.clear();
+
             vertecies.resize(vsize);
             colours.resize(vsize);
         }
@@ -491,8 +486,10 @@ public:
         posx -= posx % rate;
         posy -= posy % rate;
 
-        for(int x = posx; x < posx + maxdist; x += rate)
-            for(int y = posy; y < posy + maxdist; y += rate)
+        int index = 0;
+
+        for(int x = posx; x < posx + maxdist-1; x += rate)
+            for(int y = posy; y < posy + maxdist-1; y += rate)
             {
                 nValues[0] = noisedata(x, y);
 
@@ -507,19 +504,18 @@ public:
                     nValues[1] = noisedata(newx1,newy1);
                     nValues[2] = noisedata(newx2,newy2);
 
-                    //std::cout << nValues[0] << " " << nValues[1] << " " << nValues[2] << std::endl;
+                    vertecies[index + 0] = newx1;
+                    vertecies[index + 1] = nValues[1];
+                    vertecies[index + 2] = newy1;
 
-                    vertecies.push_back(newx1);
-                    vertecies.push_back(nValues[1]);
-                    vertecies.push_back(newy1);
+                    vertecies[index + 3] = newx2;
+                    vertecies[index + 4] = nValues[2];
+                    vertecies[index + 5] = newy2;
 
-                    vertecies.push_back(newx2);
-                    vertecies.push_back(nValues[2]);
-                    vertecies.push_back(newy2);
+                    vertecies[index + 6] = x;
+                    vertecies[index + 7] = nValues[0];
+                    vertecies[index + 8] = y;
 
-                    vertecies.push_back(x);
-                    vertecies.push_back(nValues[0]);
-                    vertecies.push_back(y);
 
                     GLfloat avg = std::abs(nValues[0] + nValues[1] + nValues[2]) /3;
 
@@ -528,17 +524,19 @@ public:
                     GLfloat c2 = avg / range * (avg >= range * 2/7) ;
                     GLfloat c3 = 0.1f;
 
-                    colours.push_back(c3);
-                    colours.push_back(c2);
-                    colours.push_back(c1);
+                    colours[index + 0] = c3;
+                    colours[index + 1] = c2;
+                    colours[index + 2] = c1;
 
-                    colours.push_back(c3);
-                    colours.push_back(c2);
-                    colours.push_back(c1);
+                    colours[index + 3] = c3;
+                    colours[index + 4] = c2;
+                    colours[index + 5] = c1;
 
-                    colours.push_back(c3);
-                    colours.push_back(c2);
-                    colours.push_back(c1);
+                    colours[index + 6] = c3;
+                    colours[index + 7] = c2;
+                    colours[index + 8] = c1;
+
+                    index += 9;
                 }
             }
     }

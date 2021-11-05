@@ -21,6 +21,8 @@ public:
     glm::mat4 ViewMatrix;
     glm::mat4 ProjectionMatrix;
 
+    bool terminate = false;
+
     // Initial position : on +Z
     glm::vec3 position = glm::vec3( -0, 700, 0); // - 1796
     // Initial horizontal angle : toward -Z
@@ -108,10 +110,17 @@ public:
         if (glfwGetKey( window, GLFW_KEY_A ) == GLFW_PRESS){
             position -= right * deltaTime * speed;
         }
+        
         if (glfwGetKey( window, GLFW_KEY_LEFT_SHIFT ) == GLFW_PRESS){
             speed = 30;
         }else{
             speed = 300;
+        }
+        
+
+        if (glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS)
+        {
+            terminate = true;
         }
 
         float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.

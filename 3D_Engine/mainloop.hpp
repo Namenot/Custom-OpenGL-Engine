@@ -22,19 +22,10 @@ class MAINLOOP
     NoiseGenerator noise;
     RenderTarget Win;
 
-    int terminate = 0;
+    bool terminate = false;
 
   int start(TERMINAL &term)
   {
-
-    // test (inheritance)
-    //term.test = 10;
-    //std::cout << term.test << std::endl;
-    //pClockbegin(c, 16);
-    //pClockbegin(c, 32);
-    //pClockend();
-    //loopthrough();
-    // end test
 
     //noise:
     noise.setwidth(1024);
@@ -42,38 +33,33 @@ class MAINLOOP
     noise.octaves = 7;
     noise.oceanfract = 1.f/7;
     noise.rdmseed = 87469;
-    //noise.randomizeseed();
     noise.generateseed();
     std::cout << "seed creation complete (" << noise.rdmseed << ")\n";
-
-    auto Tbegin = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    
     noise.aplynoisemap();
-    auto Tend = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-    std::cout << "the new method took : " << Tend - Tbegin << "ms to complete" << std::endl;
     std::cout << "harmonisation of depthdata complete\n";
 
     //noise.noisemap.swap(noise.seed);
 
     //noise.mesh();
-    noise.positionbasedmesh(0, 0, 500);
+    noise.positionbasedmesh(0, 0, 700);
     //noise.positionbasedweirdmesh(0, 0, 512);
     //noise.generateweirdmesh();
     std::cout << "mesh generation complete\n";
     std::cout << "there are "<< noise.getwidth() * 4 << " triangles currently loaded" << std::endl;
 
     //create window
-    Win.INIT(1920, 1080, true);
+    Win.INIT(1920, 1080, true); //width, hight, fullscreen
     Win.setShaders("shaders/TransformVertexShader.vertexshader", "shaders/ColorFragmentShader.fragmentshader");
     Win.bindBuffers(&noise.vertecies, &noise.colours);
 
-    std::thread first (&MAINLOOP::secondtest, this);
+    //std::thread first (&MAINLOOP::secondtest, this);
     //pClockbegin(&test, 16);
 
     Win.Draw();
+    terminate = true;
 
-    terminate = 1;
-
-    first.join();
+    //first.join();
 
     //pClockend();
 
@@ -91,8 +77,7 @@ class MAINLOOP
     glm::mat4 ViewMatrix = Win.CamCon.getViewMatrix();
     std::cout << "position data: " << ViewMatrix[0][0] << std::endl;
     std::cout << "binding new mesh" << std::endl;
-    //sleepcp(5000);
-    //Win.changeBufferData(&noise.vertecies, &noise.colours);
+
     std::cout << "binding complete return normal opperation" << std::endl;
     std::cout << "buffer swapped in 10 second" << std::endl;
 
@@ -103,7 +88,7 @@ class MAINLOOP
   {
       int oldx = (int)Win.CamCon.position[0];
       int oldy = (int)Win.CamCon.position[2];
-      int maxdist = 400;
+      int maxdist = 600;
 
       do
       {
@@ -120,28 +105,10 @@ class MAINLOOP
         }
         sleepcp(500);
 
-      }while(terminate == 0);
+      }while(terminate == false);
 
       return 0;
   }
-
-    void loopthrough()
-    {
-        std::cout << "creating the array\n";
-        int len = 1000000000;
-        std::vector<int> test;
-        for(int i = 0; i < len; ++i)
-            test.push_back(i);
-        std::cout << "array created and filled\n";
-
-        for(int i = 0; i < len; ++i)
-        {
-            test[i+1] += test[i];
-        }
-
-        std::cout << "the last digit of test is: " << test.back() << std::endl;
-
-    }
 
 };
 

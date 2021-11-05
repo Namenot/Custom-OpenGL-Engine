@@ -22,6 +22,8 @@ class RenderTarget
 private:
     GLFWwindow* window;
 
+    int fps = 60;
+
 public:
     CamController CamCon;
 
@@ -82,6 +84,7 @@ public:
             return -1;
         }
 
+        //
         glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
         // Hide the mouse and enable unlimited mouvement
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -105,7 +108,7 @@ public:
         Projection = glm::perspective(glm::radians(90.0f), 16.0f / 9.0f, 0.1f, 100000.0f);
         //Projection = glm::ortho(glm::radians(90.0f), 16.0f / 9.0f, 0.1f, 100000.0f);
 
-        glfwSwapInterval(1); // 1 sets fps to display settings (in my case to 144) whilst 0 unlocks fps
+        glfwSwapInterval(0); // 1 sets fps to display settings (in my case to 144) whilst 0 unlocks fps
 
         CamCon.window = window;
         CamCon.width = width;
@@ -124,7 +127,7 @@ public:
     }
 
     void bindBuffers(std::vector<GLfloat> *vert, std::vector<GLfloat> *col)
-    {
+    {   
         //swap vertex and color buffers
         vertecies.swap(*vert);
         colors.swap(*col);
@@ -133,12 +136,12 @@ public:
         vertexsize = vertecies.size()*sizeof(GLfloat);
         colorsize = colors.size()*sizeof(GLfloat);
 
-        //bind new buffer
+        //bind new vertex buffer
         glGenBuffers(1, &vertexbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glBufferData(GL_ARRAY_BUFFER, vertexsize, &vertecies[0], GL_STREAM_DRAW);
 
-        //bind new buffer
+        //bind new colour buffer
         glGenBuffers(1, &colorbuffer);
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
         glBufferData(GL_ARRAY_BUFFER, colorsize, &colors[0], GL_STREAM_DRAW);
@@ -178,22 +181,29 @@ public:
         glDeleteVertexArrays(1, &VertexArrayID);
     }
 
+
+    bool frametimergate(double timeoflastframe)
+    {
+        return (glfwGetTime() - timeoflastframe) >= (1.0 / fps);
+    }
+
+
     void Draw()
     {
-        double lastTime = glfwGetTime();
-        int nbFrames = 0;
+        double lastframeTime = glfwGetTime();
+
+        glm::mat4 ProjectionMatrix;
+        glm::mat4 ViewMatrix;
+        glm::mat4 ModelMatrix;
+        glm::mat4 MVP;
 
         do{
 
-            // Measure speed
-            double currentTime = glfwGetTime();
-            nbFrames++;
-             if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1 sec ago
-                 //printf and reset timer
-                 //printf("%f ms/frame\n", 1000.0/double(nbFrames));
-                 nbFrames = 0;
-                 lastTime += 1.0;
-             }
+            if(!frametimergate(lastframeTime))
+                continue;
+
+            lastframeTime =  glfwGetTime();
+
 
             // Clear the screen
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -204,10 +214,12 @@ public:
             // Compute the MVP matrix from keyboard and mouse input
             //setSpawnPoint(spawn[0], spawn[1], spawn[2]);
             CamCon.computeMatricesFromInputs();
-            glm::mat4 ProjectionMatrix = CamCon.getProjectionMatrix();
-            glm::mat4 ViewMatrix = CamCon.getViewMatrix();
-            glm::mat4 ModelMatrix = glm::mat4(1.0);
-            glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+            ProjectionMatrix = CamCon.getProjectionMatrix();
+            ViewMatrix = CamCon.getViewMatrix();
+            ModelMatrix = glm::mat4(1.0);
+            MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+            terminate = CamCon.terminate;
 
             glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
@@ -241,19 +253,19 @@ public:
             glDisableVertexAttribArray(0);
             glDisableVertexAttribArray(1);
 
-            // Swap buffers
-            glfwSwapBuffers(window);
-            glfwPollEvents();
-
             if(changed == true)
             {
                 updateBuffers();
                 changed = false;
             }
 
+            // Swap buffers
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+
             /*change this to while(terminate == false)*/
-        }while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-                    glfwWindowShouldClose(window) == 0 );
+        }while( terminate != true &&
+                    glfwWindowShouldClose(window) == 0);
 
         cleanup();
         // Close OpenGL window and terminate GLFW
