@@ -446,7 +446,7 @@ public:
         maxdist = std::max(rate, maxdist);
 
         //vsize is equal to the amount of data that is placed in the vector
-        unsigned int vsize = maxdist*maxdist*4*9;
+        unsigned int vsize = maxdist*maxdist*2*9;
 
         if(vertecies.size() != vsize)
         {
