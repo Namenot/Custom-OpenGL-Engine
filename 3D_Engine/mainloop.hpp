@@ -28,9 +28,9 @@ class MAINLOOP
   {
 
     //noise:
-    noise.setwidth(2048);
-    noise.range = 400;
-    noise.octaves = 10;
+    noise.setwidth(8200);
+    noise.range = 1000;
+    noise.octaves = 14;
     noise.oceanfract = 1.f/7;
     noise.rdmseed = 87469;
     noise.generateseed();
@@ -88,7 +88,7 @@ class MAINLOOP
   {
       int oldx = (int)Win.CamCon.position[0];
       int oldy = (int)Win.CamCon.position[2];
-      int maxdist = 700;
+      int maxdist = 1000;
 
       do
       {
@@ -103,7 +103,7 @@ class MAINLOOP
             oldx = (int)posi[0];
             oldy = (int)posi[2];
         }
-        sleepcp(500);
+        sleepcp(100);
 
       }while(terminate == false);
 
