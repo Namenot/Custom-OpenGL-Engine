@@ -543,7 +543,7 @@ public:
                     index += 9;
                 }
             }
-        std::cout << "there are now " << index << " elements in the vector with " << vsize << " expected." << std::endl;
+       //std::cout << "there are now " << index << " elements in the vector with " << vsize << " expected." << std::endl;
     }
 };
 

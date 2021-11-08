@@ -28,9 +28,9 @@ class MAINLOOP
   {
 
     //noise:
-    noise.setwidth(8200);
-    noise.range = 1000;
-    noise.octaves = 14;
+    noise.setwidth(2048);
+    noise.range = 700;
+    noise.octaves = 8;
     noise.oceanfract = 1.f/7;
     noise.rdmseed = 87469;
     noise.generateseed();

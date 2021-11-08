@@ -22,7 +22,7 @@ class RenderTarget
 private:
     GLFWwindow* window;
 
-    int fps = 60;
+    unsigned int fps = 144;
 
 public:
     CamController CamCon;
@@ -45,7 +45,7 @@ public:
     bool terminate = false;
     bool changed = false;
 
-    int INIT(int width, int height, bool fullscreenmode)
+    int INIT(unsigned int width, unsigned int height, bool fullscreenmode)
     {
         if(!glfwInit())
         {
@@ -63,8 +63,7 @@ public:
         if(fullscreenmode == true)
             monitor = glfwGetPrimaryMonitor();
 
-        //window = glfwCreateWindow( width, height, "Test-Cube", glfwGetPrimaryMonitor(), NULL); //Fullscreen variante
-        window = glfwCreateWindow( width, height, "Test-Cube", monitor, NULL); //windowed variante
+        window = glfwCreateWindow( width, height, "OpenGL-Engine Test", monitor, NULL); //windowed variante
 
         if( window == NULL )
         {
@@ -92,6 +91,8 @@ public:
         // Set the mouse at the center of the screen
         glfwPollEvents();
         glfwSetCursorPos(window, width/2, height/2);
+
+        glViewport(0,0, width, height);
 
         glClearColor(0.2f, 0.7f, 0.9f, 0.f);// r, g ,b, alpha
 
