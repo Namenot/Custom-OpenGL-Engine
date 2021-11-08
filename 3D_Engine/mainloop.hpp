@@ -8,8 +8,8 @@
 #include <chrono>
 
 // test the clock
-#include "Clockclass.hpp"
-#include "noisegenerator.hpp"
+#include "customheaders/Clockclass.hpp"
+#include "customheaders/noisegenerator.hpp"
 
 
 class MAINLOOP
@@ -25,9 +25,9 @@ class MAINLOOP
   {
 
     //noise:
-    noise.setwidth(8200);
+    noise.setwidth(16400);
     noise.range = 1000;
-    noise.octaves = 14;
+    noise.octaves = 7;
     noise.oceanfract = 1.f/7;
     noise.rdmseed = 87469;
     noise.generateseed();
@@ -86,7 +86,7 @@ class MAINLOOP
   {
       int oldx = (int)Win.CamCon.position[0];
       int oldy = (int)Win.CamCon.position[2];
-      int maxdist = 1000;
+      int maxdist = 8200;
 
       do
       {
