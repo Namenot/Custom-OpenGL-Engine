@@ -1,6 +1,3 @@
-#ifndef MAINLOOP_HPP
-#define MAINLOOP_HPP
-
 // include standart headers
 #include <iostream>
 #include <stdio.h>
@@ -11,8 +8,8 @@
 #include <chrono>
 
 // test the clock
-#include "customheaders/Clockclass.hpp"
-#include "customheaders/noisegenerator.hpp"
+#include "Clockclass.hpp"
+#include "noisegenerator.hpp"
 
 
 class MAINLOOP
@@ -22,7 +19,7 @@ class MAINLOOP
     NoiseGenerator noise;
     RenderTarget Win;
 
-    bool terminate = false;
+    int terminate = 0;
 
   int start(TERMINAL &term)
   {
@@ -77,7 +74,8 @@ class MAINLOOP
     glm::mat4 ViewMatrix = Win.CamCon.getViewMatrix();
     std::cout << "position data: " << ViewMatrix[0][0] << std::endl;
     std::cout << "binding new mesh" << std::endl;
-
+    //sleepcp(5000);
+    //Win.changeBufferData(&noise.vertecies, &noise.colours);
     std::cout << "binding complete return normal opperation" << std::endl;
     std::cout << "buffer swapped in 10 second" << std::endl;
 
@@ -111,5 +109,3 @@ class MAINLOOP
   }
 
 };
-
-#endif
