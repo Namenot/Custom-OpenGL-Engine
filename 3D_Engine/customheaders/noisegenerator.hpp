@@ -158,10 +158,13 @@ public:
                 smallest = smallest * (noisemap[i][j] >= smallest) + noisemap[i][j] * ((noisemap[i][j] < smallest));
             }
     }
-    
-    void positionbasedmesh(int posx, int posy, int maxdist)
+
+    void positionbasedmesh(int posx, int posy, int maxdist, int usedoctaves)
     {
         //rate is set to the resolution the lowest sampler
+        if (usedoctaves != 0)
+            octaves = usedoctaves;
+
         int rate = width;
         rate = rate / std::pow(2, std::min(maxoctaves, octaves));
 

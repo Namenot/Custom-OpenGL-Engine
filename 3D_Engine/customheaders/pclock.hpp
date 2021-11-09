@@ -36,20 +36,24 @@ void sleepcp(int milliseconds) // Cross-platform sleep function directly and sha
     #endif // _WIN32
 }
 
+/*
+freq = how many ticks a second should have
+Note: currently a tick can not be shorter than a millisecond i might change this later
+*/
 template<class T>
-int tick(T &t, int freq) //freq = how many ticks a second should have
+int tick(T &t, int freq)
 {
   int ms = 1000/ freq;
 
   auto Tbegin = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-  bool out = t.run();
+  bool continuetask = t.run();
   auto Tend = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 
   int tickLengthOfClockThreadListgth = std::max(0, ms - int(Tend - Tbegin)); //find out how long the tick took to execute
 
-  sleepcp(tickLengthOfClockThreadListgth);
+  sleepcp(tickLengthOfClockThreadListgth - 1);
 
-  if(out == true)
+  if(continuetask == true)
     tick(t, freq);
 
   return 1;

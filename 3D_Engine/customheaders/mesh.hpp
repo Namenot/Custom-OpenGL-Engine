@@ -109,7 +109,7 @@ anything that has the potential to leave a loaded area
         int *prefixarray = new int[length]();
 
         //whats the biggest element in the list
-        int maxElem = 0;
+        size_t maxElem = 0;
         for(auto & elem : *(in))
           {maxElem = (maxElem * (maxElem > elem.distance)) + ((maxElem <= elem.distance) * elem.distance);}
 
@@ -129,7 +129,7 @@ anything that has the potential to leave a loaded area
             }
 
             //add the prefixs together
-            for(int i = 1; i < length; ++i)
+            for(size_t i = 1; i < length; ++i)
             {
                   prefixarray[i] += prefixarray[i-1];
             }

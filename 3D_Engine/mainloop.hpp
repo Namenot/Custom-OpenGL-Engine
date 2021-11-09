@@ -29,7 +29,7 @@ class MAINLOOP
 
     //noise:
     noise.setwidth(2048);
-    noise.range = 700;
+    noise.range = 450;
     noise.octaves = 14;
     noise.oceanfract = 1.f/7;
     noise.rdmseed = 8746;
@@ -42,7 +42,7 @@ class MAINLOOP
     //noise.noisemap.swap(noise.seed);
 
     //noise.mesh();
-    noise.positionbasedmesh(0, 0, 700);
+    noise.positionbasedmesh(0, 0, 300, 6);
     //noise.positionbasedweirdmesh(0, 0, 512);
     //noise.generateweirdmesh();
     std::cout << "mesh generation complete\n";
@@ -96,7 +96,7 @@ class MAINLOOP
 
         if(std::abs((int)posi[0] - oldx) > maxdist / 3 || std::abs((int)posi[2] - oldy) > maxdist / 3)
         {
-            noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist);
+            noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist, 14);
             //noise.positionbasedweirdmesh((int)posi[0], (int)posi[2], 500);
             Win.changeBufferData(&noise.vertecies, &noise.colours);
 

@@ -12,6 +12,9 @@ using namespace glm;
 #include <iostream>
 #include <algorithm>
 
+#include "pclock.hpp"
+
+
 class CamController
 {
 private:
@@ -22,7 +25,6 @@ public:
     {
         lastTime = glfwGetTime();
     }
-
 
     GLFWwindow* window;
 
@@ -64,8 +66,6 @@ public:
 
     void computeMatricesFromInputs()
     {
-
-        
         // glfwGetTime is called only once, the first time this function is called
         // Compute time difference between current and last frame
         double currentTime = glfwGetTime();
@@ -138,11 +138,10 @@ public:
         //ProjectionMatrix = glm::ortho(glm::radians(FoV), (float)width / (float)height, 0.1f, (float)renderdistance);
      
         // Camera matrix
-        ViewMatrix       = glm::lookAt(
-                                    position,           // Camera is here
-                                    position+direction, // and looks here : at the same position, plus "direction"
-                                    up                  // Head is up (set to 0,-1,0 to look upside-down)
-                               );
+        ViewMatrix = glm::lookAt(position,           // Camera is here
+                                position+direction, // and looks here : at the same position, plus "direction"
+                                up                  // Head is up (set to 0,-1,0 to look upside-down)
+                                );
 
         // For the next frame, the "last time" will be "now"
         lastTime = currentTime;

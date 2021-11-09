@@ -268,6 +268,7 @@ public:
             // Swap buffers
             glfwSwapBuffers(window);
             glfwPollEvents();
+            //glfwWaitEvents();
 
             lastframeTime =  glfwGetTime();
 
