@@ -34,7 +34,7 @@ public:
     GLuint VertexArrayID;
     GLuint MatrixID;
 
-    glm::mat4 Projection;
+    glm::mat4 Ortho2d;
 
     GLuint vertexbuffer;
     GLuint colorbuffer;
@@ -83,8 +83,8 @@ public:
             return -1;
         }
 
-        //
-        glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+        // reads the keyboard input
+        //glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
         // Hide the mouse and enable unlimited mouvement
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -106,7 +106,7 @@ public:
         glBindVertexArray(VertexArrayID);
 
         // Projection matrix : 90 Field of View, 16:9 ratio, display range : 0.1 unit <-> 100 units(renderdistance)
-        Projection = glm::perspective(glm::radians(90.0f), 16.0f / 9.0f, 0.1f, 100000.0f);
+        //Projection = glm::perspective(glm::radians(90.0f), 16.0f / 9.0f, 0.1f, 0.3f);
         //Projection = glm::ortho(glm::radians(90.0f), 16.0f / 9.0f, 0.1f, 100000.0f);
 
         glfwSwapInterval(0); // 1 sets fps to display settings (in my case to 144) whilst 0 unlocks fps
@@ -166,10 +166,11 @@ public:
 
     void updateBuffers()
     {
-        //bind new buffer
+        //bind new vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
         glBufferData(GL_ARRAY_BUFFER, vertexsize, &vertecies[0], GL_STREAM_DRAW);
-        //bind new buffer
+
+        //bind new colour buffer
         glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
         glBufferData(GL_ARRAY_BUFFER, colorsize, &colors[0], GL_STREAM_DRAW);
     }
@@ -202,9 +203,6 @@ public:
 
             if(!frametimergate(lastframeTime))
                 continue;
-
-            lastframeTime =  glfwGetTime();
-
 
             // Clear the screen
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -254,8 +252,15 @@ public:
             glDisableVertexAttribArray(0);
             glDisableVertexAttribArray(1);
 
+            //2D Projection
+            glDisable(GL_DEPTH_TEST);
+            glMatrixMode(GL_PROJECTION);
+
+            glEnable(GL_DEPTH_TEST);
+            //end of 2D Projection
+            
             if(changed == true)
-            {
+            {   
                 updateBuffers();
                 changed = false;
             }
@@ -264,7 +269,8 @@ public:
             glfwSwapBuffers(window);
             glfwPollEvents();
 
-            /*change this to while(terminate == false)*/
+            lastframeTime =  glfwGetTime();
+
         }while( terminate != true &&
                     glfwWindowShouldClose(window) == 0);
 

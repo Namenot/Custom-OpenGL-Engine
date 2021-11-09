@@ -14,7 +14,15 @@ using namespace glm;
 
 class CamController
 {
+private:
+    double lastTime;
+
 public:
+    CamController()
+    {
+        lastTime = glfwGetTime();
+    }
+
 
     GLFWwindow* window;
 
@@ -32,8 +40,8 @@ public:
     // Initial Field of View
     float initialFoV = 107.0f;
 
-    int width = 1600;
-    int height = 900;
+    int width = 1920;
+    int height = 1080;
 
     int renderdistance = 10000;
 
@@ -56,9 +64,9 @@ public:
 
     void computeMatricesFromInputs()
     {
-        // glfwGetTime is called only once, the first time this function is called
-        static double lastTime = glfwGetTime();
 
+        
+        // glfwGetTime is called only once, the first time this function is called
         // Compute time difference between current and last frame
         double currentTime = glfwGetTime();
         float deltaTime = float(currentTime - lastTime);
@@ -126,7 +134,9 @@ public:
         float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
         // Projection matrix : 45� Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-        ProjectionMatrix = glm::perspective(glm::radians(FoV), float(width) / float(height), 0.1f, float(renderdistance));
+        ProjectionMatrix = glm::perspective(glm::radians(FoV), (float)width / (float)height, 0.1f, (float)renderdistance);
+        //ProjectionMatrix = glm::ortho(glm::radians(FoV), (float)width / (float)height, 0.1f, (float)renderdistance);
+     
         // Camera matrix
         ViewMatrix       = glm::lookAt(
                                     position,           // Camera is here

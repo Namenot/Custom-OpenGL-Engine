@@ -30,9 +30,9 @@ class MAINLOOP
     //noise:
     noise.setwidth(2048);
     noise.range = 700;
-    noise.octaves = 8;
+    noise.octaves = 14;
     noise.oceanfract = 1.f/7;
-    noise.rdmseed = 87469;
+    noise.rdmseed = 8746;
     noise.generateseed();
     std::cout << "seed creation complete (" << noise.rdmseed << ")\n";
     
@@ -49,7 +49,7 @@ class MAINLOOP
     std::cout << "there are "<< noise.getwidth() * 4 << " triangles currently loaded" << std::endl;
 
     //create window
-    Win.INIT(1920, 1080, true); //width, hight, fullscreen
+    Win.INIT(800, 450, false); //width, hight, fullscreen
     Win.setShaders("shaders/TransformVertexShader.vertexshader", "shaders/ColorFragmentShader.fragmentshader");
     Win.bindBuffers(&noise.vertecies, &noise.colours);
 
@@ -94,7 +94,7 @@ class MAINLOOP
       {
         glm::vec3 posi = Win.CamCon.position;
 
-        if(std::abs((int)posi[0] - oldx) > maxdist / 4 || std::abs((int)posi[2] - oldy) > maxdist / 4)
+        if(std::abs((int)posi[0] - oldx) > maxdist / 3 || std::abs((int)posi[2] - oldy) > maxdist / 3)
         {
             noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist);
             //noise.positionbasedweirdmesh((int)posi[0], (int)posi[2], 500);
