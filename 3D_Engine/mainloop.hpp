@@ -39,12 +39,7 @@ class MAINLOOP
     noise.aplynoisemap();
     std::cout << "harmonisation of depthdata complete\n";
 
-    //noise.noisemap.swap(noise.seed);
-
-    //noise.mesh();
     noise.positionbasedmesh(0, 0, 300, 6);
-    //noise.positionbasedweirdmesh(0, 0, 512);
-    //noise.generateweirdmesh();
     std::cout << "mesh generation complete\n";
     std::cout << "there are "<< noise.getwidth() * 4 << " triangles currently loaded" << std::endl;
 
@@ -97,7 +92,6 @@ class MAINLOOP
         if(std::abs((int)posi[0] - oldx) > maxdist / 3 || std::abs((int)posi[2] - oldy) > maxdist / 3)
         {
             noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist, 14);
-            //noise.positionbasedweirdmesh((int)posi[0], (int)posi[2], 500);
             Win.changeBufferData(&noise.vertecies, &noise.colours);
 
             oldx = (int)posi[0];
