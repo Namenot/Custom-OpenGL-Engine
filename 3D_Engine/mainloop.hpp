@@ -44,7 +44,7 @@ class MAINLOOP
     std::cout << "there are "<< noise.getwidth() * 4 << " triangles currently loaded" << std::endl;
 
     //create window
-    Win.INIT(800, 450, false); //width, hight, fullscreen
+    Win.INIT(1920, 1080, true); //width, hight, fullscreen
     Win.setShaders("shaders/TransformVertexShader.vertexshader", "shaders/ColorFragmentShader.fragmentshader");
     Win.bindBuffers(&noise.vertecies, &noise.colours);
 
@@ -83,7 +83,7 @@ class MAINLOOP
   {
       int oldx = (int)Win.CamCon.position[0];
       int oldy = (int)Win.CamCon.position[2];
-      int maxdist = 1000;
+      int maxdist = 2000;
 
       do
       {
