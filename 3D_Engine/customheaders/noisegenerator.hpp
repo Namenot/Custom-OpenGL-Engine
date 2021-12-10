@@ -159,7 +159,7 @@ public:
             }
     }
 
-    void positionbasedmesh(int posx, int posy, int maxdist, int usedoctaves)
+    void positionbasedmesh(int posx, int posy, int maxdist, int usedoctaves, bool replace)
     {
         //rate is set to the resolution the lowest sampler
         if (usedoctaves != 0)
@@ -175,13 +175,22 @@ public:
         //vsize is equal to the amount of data that is placed in the vector
         unsigned int vsize = (maxdist*maxdist)/rate *2*9;
 
-        if(vertecies.size() != vsize)
+        int vertexoffset;
+        int colouroffset;
+
+        if(replace == true)
         {
             vertecies.clear();
             colours.clear();
+        }
 
-            vertecies.resize(vsize);
-            colours.resize(vsize);
+        vertexoffset = std::max((int)vertecies.size(), 0);
+        colouroffset = std::max((int)colours.size(), 0);
+
+        if(vertecies.size() != vsize)
+        {
+            vertecies.resize(vsize + vertexoffset);
+            colours.resize(vsize + colouroffset);
         }
 
         std::array<GLfloat, 3> nValues = {0, 0, 0};
@@ -235,17 +244,17 @@ public:
                     nValues[1] = noisedata(newx1,newy1);
                     nValues[2] = noisedata(newx2,newy2);
 
-                    vertecies[index + 0] = newx1;
-                    vertecies[index + 1] = nValues[1];
-                    vertecies[index + 2] = newy1;
+                    vertecies[vertexoffset + index + 0] = newx1;
+                    vertecies[vertexoffset + index + 1] = nValues[1];
+                    vertecies[vertexoffset + index + 2] = newy1;
 
-                    vertecies[index + 3] = newx2;
-                    vertecies[index + 4] = nValues[2];
-                    vertecies[index + 5] = newy2;
+                    vertecies[vertexoffset + index + 3] = newx2;
+                    vertecies[vertexoffset + index + 4] = nValues[2];
+                    vertecies[vertexoffset + index + 5] = newy2;
 
-                    vertecies[index + 6] = x;
-                    vertecies[index + 7] = nValues[0];
-                    vertecies[index + 8] = y;
+                    vertecies[vertexoffset + index + 6] = x;
+                    vertecies[vertexoffset + index + 7] = nValues[0];
+                    vertecies[vertexoffset + index + 8] = y;
 
 
                     GLfloat avg = std::abs(nValues[0] + nValues[1] + nValues[2]) /3;
@@ -255,17 +264,17 @@ public:
                     GLfloat c2 = avg / range * (avg >= range * 2/7) ;
                     GLfloat c3 = 0.1f;
 
-                    colours[index + 0] = c3;
-                    colours[index + 1] = c2;
-                    colours[index + 2] = c1;
+                    colours[colouroffset + index + 0] = c3;
+                    colours[colouroffset + index + 1] = c2;
+                    colours[colouroffset + index + 2] = c1;
 
-                    colours[index + 3] = c3;
-                    colours[index + 4] = c2;
-                    colours[index + 5] = c1;
+                    colours[colouroffset + index + 3] = c3;
+                    colours[colouroffset + index + 4] = c2;
+                    colours[colouroffset + index + 5] = c1;
 
-                    colours[index + 6] = c3;
-                    colours[index + 7] = c2;
-                    colours[index + 8] = c1;
+                    colours[colouroffset + index + 6] = c3;
+                    colours[colouroffset + index + 7] = c2;
+                    colours[colouroffset + index + 8] = c1;
 
                     index += 9;
                 }

@@ -28,8 +28,8 @@ class MAINLOOP
   {
 
     //noise:
-    noise.setwidth(2048);
-    noise.range = 450;
+    noise.setwidth(4500);
+    noise.range = 1000;
     noise.octaves = 14;
     noise.oceanfract = 1.f/7;
     noise.rdmseed = 8746;
@@ -39,7 +39,7 @@ class MAINLOOP
     noise.aplynoisemap();
     std::cout << "harmonisation of depthdata complete\n";
 
-    noise.positionbasedmesh(0, 0, 300, 6);
+    noise.positionbasedmesh(0, 0, 300, 6, true);
     std::cout << "mesh generation complete\n";
     std::cout << "there are "<< noise.getwidth() * 4 << " triangles currently loaded" << std::endl;
 
@@ -66,9 +66,6 @@ class MAINLOOP
     std::cout << "I am a test to see whether or not this draw thing works" << std::endl;
 
     std::cout << "create new mesh"<< std::endl;
-    //noise.mesh();
-    //noise.noisemap.swap(noise.seed);
-    //noise.generateweirdmesh();
     glm::mat4 ViewMatrix = Win.CamCon.getViewMatrix();
     std::cout << "position data: " << ViewMatrix[0][0] << std::endl;
     std::cout << "binding new mesh" << std::endl;
@@ -83,7 +80,8 @@ class MAINLOOP
   {
       int oldx = (int)Win.CamCon.position[0];
       int oldy = (int)Win.CamCon.position[2];
-      int maxdist = 2000;
+      int maxdist = 4000;
+      int highresdist = 200;
 
       do
       {
@@ -91,7 +89,8 @@ class MAINLOOP
 
         if(std::abs((int)posi[0] - oldx) > maxdist / 3 || std::abs((int)posi[2] - oldy) > maxdist / 3)
         {
-            noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist, 14);
+            noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist, 5, true);
+            noise.positionbasedmesh((int)posi[0], (int)posi[2], highresdist, 14, false);
             Win.changeBufferData(&noise.vertecies, &noise.colours);
 
             oldx = (int)posi[0];
