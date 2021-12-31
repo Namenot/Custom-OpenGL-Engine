@@ -1,3 +1,4 @@
+build/
 build/3D_Engine
 build/cmake_install.cmake
 build/CMakeCache.txt
