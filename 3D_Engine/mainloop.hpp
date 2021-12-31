@@ -28,8 +28,8 @@ class MAINLOOP
   {
 
     //noise:
-    noise.setwidth(4500);
-    noise.range = 1000;
+    noise.setwidth(2048);
+    noise.range = 400;
     noise.octaves = 14;
     noise.oceanfract = 1.f/7;
     noise.rdmseed = 8746;
@@ -39,7 +39,7 @@ class MAINLOOP
     noise.aplynoisemap();
     std::cout << "harmonisation of depthdata complete\n";
 
-    noise.positionbasedmesh(0, 0, 300, 6, true);
+    noise.positionbasedmesh(0, 0, 300, 6, true, &noise.vertecies, &noise.colours);
     std::cout << "mesh generation complete\n";
     std::cout << "there are "<< noise.getwidth() * 4 << " triangles currently loaded" << std::endl;
 
@@ -89,8 +89,8 @@ class MAINLOOP
 
         if(std::abs((int)posi[0] - oldx) > maxdist / 3 || std::abs((int)posi[2] - oldy) > maxdist / 3)
         {
-            noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist, 5, true);
-            noise.positionbasedmesh((int)posi[0], (int)posi[2], highresdist, 14, false);
+            noise.positionbasedmesh((int)posi[0], (int)posi[2], maxdist,      7,  true, &noise.vertecies, &noise.colours);
+            noise.positionbasedmesh((int)posi[0], (int)posi[2], highresdist, 14, false, &noise.vertecies, &noise.colours);
             Win.changeBufferData(&noise.vertecies, &noise.colours);
 
             oldx = (int)posi[0];
